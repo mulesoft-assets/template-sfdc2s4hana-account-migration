@@ -13,6 +13,20 @@
 	<version>2.1.0-SNAPSHOT</version>
 	<packaging>mule-application</packaging>
 	<name>template-sfdc2s4hana-account-migration</name>
+	
+	<build>
+        <plugins>
+            <plugin>
+                <groupId>org.mule.tools.maven</groupId>
+                <artifactId>mule-maven-plugin</artifactId>
+                <version>${mule.maven.plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <classifier>mule-application-template</classifier>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 	<dependencies>
 		<dependency>
