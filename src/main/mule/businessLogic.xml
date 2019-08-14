@@ -122,7 +122,7 @@ output application/java
 					<s4hana:update-entity service="API_BUSINESS_PARTNER"
 						entityType="A_BusinessPartner" doc:name="Update Account in S4Hana"
 						doc:id="4a86acec-f67e-409b-beac-1cf7002440f4" config-ref="SAP_S_4HANA_Config" />
-					<ee:transform doc:name="Sava S4Hana Response"
+					<ee:transform doc:name="Save S4Hana Response"
 						doc:id="acebf704-b097-4167-a3fe-97eb9f0b3e96">
 						<ee:message>
 							<ee:set-payload><![CDATA[%dw 2.0
