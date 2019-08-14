@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+
+	<flow name="errorHandlingFlow" doc:id="7128975a-ea97-4f44-b96c-fcb34d5b84d4">
+		<logger level="ERROR" doc:name="Log error"
+			doc:id="f3281dab-11d1-4f51-8164-563d760284cf" message="Error occurred #[payload]" />
+	</flow>
+</mule>
