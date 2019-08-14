@@ -1,5 +1,5 @@
 
-# Anypoint Template: Salesforce to SAP4HANA Account Migration
+# Anypoint Template: Salesforce to SAP S/4HANA Account Migration
 
 <!-- Header (start) -->
 
@@ -9,17 +9,17 @@
 This template is subject to the conditions of the <a href="https://s3.amazonaws.com/templates-examples/AnypointTemplateLicense.pdf">MuleSoft License Agreement</a>. Review the terms of the license before downloading and using this template. You can use this template for free with the Mule Enterprise Edition, CloudHub, or as a trial in Anypoint Studio.
 # Use Case
 <!-- Use Case (start) -->
-This Anypoint template serves as a foundation for setting an online sync of accounts from Salesforce to SAP4HANA.
+This Anypoint template serves as a foundation for setting an online sync of accounts from Salesforce to SAP S/4HANA.
 
-Use this template if would like to sync accounts from Salesforce to SAP4HANA business partners in manner of one time synchronization by browse toting the HTTP endpoint. The template will fetch all accounts by specified criteria and send it as to SAP4HANA to create/update business partner there.
+Use this template if would like to sync accounts from Salesforce to SAP S/4HANA business partners in manner of one time synchronization by browse toting the HTTP endpoint. The template will fetch all accounts by specified criteria and send it as to SAP S/4HANA to create/update business partner there.
 Requirements have been set not only to be used as examples, but also to establish a starting point to adapt your integration to your requirements.
 
 As implemented, this template leverages the Mule batch module.
 The batch job is divided into *Process* and *On Complete* stages.
 The integration is triggered by the HTTP endpoint to fetch all the Salesforce Accounts suitable for migration.
-Fetched accounts are passed to the batch as input. In the batch the business partner is fetched from SAP4HANA by its name.
-If it exists, its business partner identifier is resolved against SAP4HANA. If it doesn't exist, then new business partner number is fetched from SAP4HANA.
-Afterwards every such account from Salesforce is sent to SAP4HANA where it is asynchronously updated or created.
+Fetched accounts are passed to the batch as input. In the batch the business partner is fetched from SAP S/4HANA by its name.
+If it exists, its business partner identifier is resolved against SAP S/4HANA. If it doesn't exist, then new business partner number is fetched from SAP S/4HANA.
+Afterwards every such account from Salesforce is sent to SAP S/4HANA where it is asynchronously updated or created.
 Finally during the *On Complete* stage the template logs output statistics data into the console and send a notification e-mail with the results of the batch execution.
 <!-- Use Case (end) -->
 
@@ -33,14 +33,14 @@ To make this template run, there are certain preconditions that must be consider
 **Failing to do so could lead to unexpected behavior of the template.**
 
 Before using this template, you may want to check out this [Documentation Page](https://docs.mulesoft.com/connectors/sap/sap-s4hana-cloud-connector), that will teach you how to work
-with SAP4HANA and Anypoint Studio.
+with SAP S/4HANA and Anypoint Studio.
 
 <!-- Considerations (end) -->
 
 
-## SAP4HANA Considerations
+## SAP S/4HANA Considerations
 
-Here's what you need to know to get this template to work with SAP4HANA.
+Here's what you need to know to get this template to work with SAP S/4HANA.
 
 ## Salesforce Considerations
 
@@ -123,7 +123,7 @@ After you import your template into Anypoint Studio, follow these steps to run i
 In order to make this template run on Anypoint Studio there are a few extra steps that needs to be made.
 Please check this Documentation Page:
 
-+ [Enabling Your Studio Project for SAP4HANA](https://docs.mulesoft.com/connectors/sap/sap-s4hana-cloud-connector)
++ [Enabling Your Studio Project for SAP S/4HANA](https://docs.mulesoft.com/connectors/sap/sap-s4hana-cloud-connector)
 <!-- Running on Studio (end) -->
 
 ### Running on Mule Standalone
@@ -155,11 +155,11 @@ To use this template, configure properties such as credentials, configurations, 
 + sfdc.password `DylanPassword123`
 + sfdc.securityToken `avsfwCUl7apQs56Xq2AKi3X`
 
-**SAP4HANA Connector Configuration**
+**SAP S/4HANA Connector Configuration**
 
-+ s4hana.baseUrl `your.sap4hana.address.com`
-+ s4hana.username `your.sap4hana.username`
-+ s4hana.password `your.sap4hana.password`
++ s4hana.baseUrl `your.s4hana.address.com`
++ s4hana.username `your.s4hana.username`
++ s4hana.password `your.s4hana.password`
 
 **SMTP Services Configuration**
 
