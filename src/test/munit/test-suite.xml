@@ -52,7 +52,7 @@ output application/java
         <salesforce:create doc:name="Create test Account in Salesforce" doc:id="49d6f93d-7a6c-4977-92d2-ea812d17f777" config-ref="Salesforce_Config" type="Account">
             <salesforce:records><![CDATA[#[[vars.testData]]]]></salesforce:records>
         </salesforce:create>
-        <set-variable value="#[payload.id]" doc:name="Store salesforce ID to variable sfdcTestID" doc:id="5ab8344f-27e5-4053-8b94-176bf2892ded" variableName="sfdcTestID" />
+		<set-variable value="#[payload[0].id]" doc:name="Store salesforce ID to variable sfdcTestID" doc:id="5ab8344f-27e5-4053-8b94-176bf2892ded" variableName="sfdcTestID" />
         <ee:transform doc:name="Query for changing data in test Business Partner of s4Hana" doc:id="15c866fe-ca23-46b9-b8ab-8f80facecf07">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -109,7 +109,7 @@ payload filter ($.Name == vars.testData.Name)]]></ee:set-payload>
     </sub-flow>
     <munit:after-test name="test-suiteAfter_Test" description="After tests actions" doc:id="68810fae-e8de-48c2-827f-dd6259b60035">
         <salesforce:delete doc:name="Delete source Account in Salesforce" doc:id="8c7b5916-6702-449a-be49-57753b321b0d" config-ref="Salesforce_Config">
-            <salesforce:delete-ids><![CDATA[#[vars.sfdcTestID]]]></salesforce:delete-ids>
+            <salesforce:delete-ids><![CDATA[#[[vars.sfdcTestID]]]]></salesforce:delete-ids>
         </salesforce:delete>
         <s4hana:update-entity service="API_BUSINESS_PARTNER" entityType="A_BusinessPartner" doc:name="Renewal test Business Partner" doc:id="17e9a884-57e1-4860-9c80-07961215dbf8"
             config-ref="SAP_S_4HANA_Config">
