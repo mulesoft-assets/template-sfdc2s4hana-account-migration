@@ -31,7 +31,7 @@ var id= randomInt(1000)
 
         <logger level="INFO" doc:name="Log test data" doc:id="a3486a57-81de-4fda-bf18-b48d21772948" message="Test Data: #[output application/json --- vars.testData]" />
         <flow-ref doc:name="Call testRecordSubFlow" doc:id="cab1a769-b0c2-429d-9213-78a4bfc918e7" name="testRecordSubFlow" />
-        <ee:transform doc:name="Save data to s4hanaData variable" doc:id="0b2fc3e7-0de0-472b-8799-67c2075f6c03">
+		<ee:transform doc:name="Save data to s4hanaData variable" doc:id="0b2fc3e7-0de0-472b-8799-67c2075f6c03">
             <ee:message>
             </ee:message>
             <ee:variables>
@@ -49,11 +49,11 @@ output application/java
 	]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
-        <salesforce:create doc:name="Create test Account in Salesforce" doc:id="49d6f93d-7a6c-4977-92d2-ea812d17f777" config-ref="Salesforce_Config" type="Account">
+		<salesforce:create doc:name="Create test Account in Salesforce" doc:id="49d6f93d-7a6c-4977-92d2-ea812d17f777" config-ref="Salesforce_Config" type="Account">
             <salesforce:records><![CDATA[#[[vars.testData]]]]></salesforce:records>
         </salesforce:create>
 		<set-variable value="#[payload[0].id]" doc:name="Store salesforce ID to variable sfdcTestID" doc:id="5ab8344f-27e5-4053-8b94-176bf2892ded" variableName="sfdcTestID" />
-        <ee:transform doc:name="Query for changing data in test Business Partner of s4Hana" doc:id="15c866fe-ca23-46b9-b8ab-8f80facecf07">
+		<ee:transform doc:name="Query data, which we want to modify for testing" doc:id="15c866fe-ca23-46b9-b8ab-8f80facecf07">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -66,9 +66,9 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
-        <s4hana:update-entity service="API_BUSINESS_PARTNER" entityType="A_BusinessPartner" doc:name="Change test Business Partner for test data" doc:id="9385c561-6cc4-4761-9fdf-d485aee0d640"
+		<s4hana:update-entity service="API_BUSINESS_PARTNER" entityType="A_BusinessPartner" doc:name="Change test Business Partner for test data" doc:id="9385c561-6cc4-4761-9fdf-d485aee0d640"
             config-ref="SAP_S_4HANA_Config" />
-        <munit-tools:mock-when doc:name="Mock email processor to avoid sending email" doc:id="ca63aa76-8c0e-4994-9216-ae97e6d38162" processor="email:send">
+		<munit-tools:mock-when doc:name="Mock email processor to avoid sending email" doc:id="ca63aa76-8c0e-4994-9216-ae97e6d38162" processor="email:send">
             <munit-tools:then-return />
         </munit-tools:mock-when>
     </munit:before-test>
