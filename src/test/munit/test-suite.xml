@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:s4hana="http://www.mulesoft.org/schema/mule/s4hana" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+    xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+    xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+    xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/s4hana http://www.mulesoft.org/schema/mule/s4hana/current/mule-s4hana.xsd">
+    <munit:config name="test-suite.xml" doc:name="MUnit configuration" />
+    <configuration-properties doc:name="Configuration properties" doc:id="61aa3855-ff5f-4118-901f-bd50187c0d90" file="mule.test.properties" />
+    <munit:before-test name="test-suiteBefore_Test" description="Before tests actions" doc:id="dad9679c-8bbe-4e64-96fa-98d8bdfd7d7d">
+        <ee:transform doc:name="Prepare common testing data" doc:id="fc8422cf-5245-4f22-bf1d-7bc8eb9b09f1">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="testData"><![CDATA[%dw 2.0
+output application/java
+var id= randomInt(1000)
+---
+{
+	Name: "TestRecord" ++ id,
+	Industry: "Education",
+}
+]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+
+        <logger level="INFO" doc:name="Log test data" doc:id="a3486a57-81de-4fda-bf18-b48d21772948" message="Test Data: #[output application/json --- vars.testData]" />
+        <flow-ref doc:name="Call testRecordSubFlow" doc:id="cab1a769-b0c2-429d-9213-78a4bfc918e7" name="testRecordSubFlow" />
+		<ee:transform doc:name="Save data to s4hanaData variable" doc:id="0b2fc3e7-0de0-472b-8799-67c2075f6c03">
+            <ee:message>
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="s4hanaData"><![CDATA[%dw 2.0
+output application/java
+---
+{
+	BusinessPartner: payload.BusinessPartner,
+	OrganizationBPName1: payload.OrganizationBPName1,
+	OrganizationLiquidationDate: payload.OrganizationLiquidationDate,
+	BusinessPartnerName: payload.BusinessPartnerName,
+	BusinessPartnerCategory: payload.BusinessPartnerCategory,
+	Industry: payload.Industry,
+}
+	]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+		<salesforce:create doc:name="Create test Account in Salesforce" doc:id="49d6f93d-7a6c-4977-92d2-ea812d17f777" config-ref="Salesforce_Config" type="Account">
+            <salesforce:records><![CDATA[#[[vars.testData]]]]></salesforce:records>
+        </salesforce:create>
+		<set-variable value="#[payload[0].id]" doc:name="Store salesforce ID to variable sfdcTestID" doc:id="5ab8344f-27e5-4053-8b94-176bf2892ded" variableName="sfdcTestID" />
+		<ee:transform doc:name="Query data, which we want to modify for testing" doc:id="15c866fe-ca23-46b9-b8ab-8f80facecf07">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	BusinessPartner: vars.s4hanaData.BusinessPartner,
+	OrganizationBPName1: vars.testData.Name,
+	BusinessPartnerName: vars.testData.Name,
+	Industry: "Test",
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+		<s4hana:update-entity service="API_BUSINESS_PARTNER" entityType="A_BusinessPartner" doc:name="Change test Business Partner for test data" doc:id="9385c561-6cc4-4761-9fdf-d485aee0d640"
+            config-ref="SAP_S_4HANA_Config" />
+		<munit-tools:mock-when doc:name="Mock email processor to avoid sending email" doc:id="ca63aa76-8c0e-4994-9216-ae97e6d38162" processor="email:send">
+            <munit-tools:then-return />
+        </munit-tools:mock-when>
+    </munit:before-test>
+    <munit:test name="test-suite-mainFlowTest" description="Test" doc:id="a3d6ab47-092f-4ad6-b063-00a956d982be">
+        <munit:execution>
+            <flow-ref doc:name="Call queryFromSalesforceSubFlow" doc:id="1a0a0c83-b335-4128-b850-35cebe17fa4d" name="queryFromSalesforceSubFlow" />
+            <ee:transform doc:name="Filter of test records" doc:id="2088d70d-3d13-49c3-bfb9-43f3f43036b1">
+                <ee:message>
+                    <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+payload filter ($.Name == vars.testData.Name)]]></ee:set-payload>
+                </ee:message>
+            </ee:transform>
+            <flow-ref doc:name="Call businessLogicFlow" doc:id="2ea82531-904e-4992-8d5d-30b7e7bca831" name="businessLogicFlow" />
+            <scripting:execute doc:name="Sleep for 10s until the processing is completed" doc:id="6d1fb45e-2afb-4e75-8f0d-7015e8e154e1" engine="groovy">
+                <scripting:code>sleep(10000)</scripting:code>
+            </scripting:execute>
+            <flow-ref doc:name="Call testRecordSubFlow" doc:id="80e382ee-dd9f-4c27-bbea-ebf897cc283d" name="testRecordSubFlow" />
+
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that doc:name="Assert test migrated test record" doc:id="b0f7bb47-f5fb-4765-ad0b-f12bfd1fdccf" expression="#[vars.testData.Industry]"
+                is="#[MunitTools::equalTo(payload.Industry)]" message="Assert test didn't migrate test record" />
+            <munit-tools:verify-call doc:name="Verify call to s4hana update " doc:id="314065dc-ae31-4834-a2c3-bffbb2f554cf" processor="s4hana:update-entity"
+                atLeast="1" times="2" />
+            <munit-tools:verify-call doc:name="Verify call to Salesforce query" doc:id="f7ded63e-0058-40e7-ae9b-48df85e6c473" processor="salesforce:query"
+                times="1" atLeast="1" />
+        </munit:validation>
+    </munit:test>
+    <sub-flow name="testRecordSubFlow" doc:id="6f23506d-729e-49cc-97da-6b18a4a6456d">
+        <s4hana:get-entity doc:name="Get Business Partner by Id" doc:id="7f807d85-d4dd-42cb-bb09-e80ba7e4bc38" config-ref="SAP_S_4HANA_Config" service="API_BUSINESS_PARTNER"
+            entityType="A_BusinessPartner">
+            <s4hana:key><![CDATA[#[{
+   "BusinessPartner": p('test.s4hana.businessPartnerId')      
+}]]]></s4hana:key>
+        </s4hana:get-entity>
+    </sub-flow>
+    <munit:after-test name="test-suiteAfter_Test" description="After tests actions" doc:id="68810fae-e8de-48c2-827f-dd6259b60035">
+        <salesforce:delete doc:name="Delete source Account in Salesforce" doc:id="8c7b5916-6702-449a-be49-57753b321b0d" config-ref="Salesforce_Config">
+            <salesforce:delete-ids><![CDATA[#[[vars.sfdcTestID]]]]></salesforce:delete-ids>
+        </salesforce:delete>
+        <s4hana:update-entity service="API_BUSINESS_PARTNER" entityType="A_BusinessPartner" doc:name="Renewal test Business Partner" doc:id="17e9a884-57e1-4860-9c80-07961215dbf8"
+            config-ref="SAP_S_4HANA_Config">
+            <s4hana:entity><![CDATA[#[vars.s4hanaData]]]></s4hana:entity>
+        </s4hana:update-entity>
+
+    </munit:after-test>
+
+
+
+</mule>
