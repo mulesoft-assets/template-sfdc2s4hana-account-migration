@@ -1,17 +1,17 @@
 
-# Anypoint Template: Salesforce to SAP S/4HANA Account Migration
+# Anypoint Template: Salesforce to SAP S/4HANA Account Migration	
 
 <!-- Header (start) -->
 
 <!-- Header (end) -->
 
 # License Agreement
-This template is subject to the conditions of the <a href="https://s3.amazonaws.com/templates-examples/AnypointTemplateLicense.pdf">MuleSoft License Agreement</a>. Review the terms of the license before downloading and using this template. You can use this template for free with the Mule Enterprise Edition, CloudHub, or as a trial in Anypoint Studio.
+This template is subject to the conditions of the <a href="https://s3.amazonaws.com/templates-examples/AnypointTemplateLicense.pdf">MuleSoft License Agreement</a>. Review the terms of the license before downloading and using this template. You can use this template for free with the Mule Enterprise Edition, CloudHub, or as a trial in Anypoint Studio. 
 # Use Case
 <!-- Use Case (start) -->
 This Anypoint template serves as a foundation for setting an online sync of accounts from Salesforce to SAP S/4HANA.
 
-Use this template if would like to sync accounts from Salesforce to SAP S/4HANA business partners in manner of one time synchronization by browse toting the HTTP endpoint. The template will fetch all accounts by specified criteria and send it as to SAP S/4HANA to create/update business partner there.
+Use this template if you would like to sync accounts from Salesforce to SAP S/4HANA business partners in manner of one time synchronization by browse toting the HTTP endpoint. The template will fetch all accounts by specified criteria and send it to SAP S/4HANA to create/update business partner.
 Requirements have been set not only to be used as examples, but also to establish a starting point to adapt your integration to your requirements.
 
 As implemented, this template leverages the Mule batch module.
@@ -19,8 +19,8 @@ The batch job is divided into *Process* and *On Complete* stages.
 The integration is triggered by the HTTP endpoint to fetch all the Salesforce Accounts suitable for migration.
 Fetched accounts are passed to the batch as input. In the batch the business partner is fetched from SAP S/4HANA by its name.
 If it exists, its business partner identifier is resolved against SAP S/4HANA. If it doesn't exist, then new business partner number is fetched from SAP S/4HANA.
-Afterwards every such account from Salesforce is sent to SAP S/4HANA where it is asynchronously updated or created.
-Finally during the *On Complete* stage the template logs output statistics data into the console and send a notification e-mail with the results of the batch execution.
+Afterwards every account from Salesforce is sent to SAP S/4HANA where it is asynchronously updated or created.
+Finally, during the *On Complete* stage the template logs output statistics data into the console and sends a notification e-mail with the results of the batch execution.
 <!-- Use Case (end) -->
 
 # Considerations
@@ -29,18 +29,14 @@ Finally during the *On Complete* stage the template logs output statistics data 
 <!-- Default Considerations (end) -->
 
 <!-- Considerations (start) -->
-To make this template run, there are certain preconditions that must be considered. All of them deal with the preparations in both, that must be made for the template to run smoothly.
+​To make this template run, there are certain preconditions that must be considered. All of them deal with the preparations in both source (Database) and destination (Salesforce) systems, that must be made for the template to run smoothly.
 **Failing to do so could lead to unexpected behavior of the template.**
 
 Before using this template, you may want to check out this [Documentation Page](https://docs.mulesoft.com/connectors/sap/sap-s4hana-cloud-connector), that will teach you how to work
 with SAP S/4HANA and Anypoint Studio.
-
 <!-- Considerations (end) -->
 
 
-## SAP S/4HANA Considerations
-
-Here's what you need to know to get this template to work with SAP S/4HANA.
 
 ## Salesforce Considerations
 
@@ -54,14 +50,14 @@ Here's what you need to know about Salesforce to get this template to work:
 If the user who configured the template for the source system does not have at least *read only* permissions for the fields that are fetched, then an *InvalidFieldFault* API fault displays.
 
 ```
-java.lang.RuntimeException: [InvalidFieldFault [ApiQueryFault
+java.lang.RuntimeException: [InvalidFieldFault [ApiQueryFault 
 [ApiFault  exceptionCode='INVALID_FIELD'
-exceptionMessage='Account.Phone, Account.Rating, Account.RecordTypeId,
+exceptionMessage='Account.Phone, Account.Rating, Account.RecordTypeId, 
 Account.ShippingCity
 ^
 ERROR at Row:1:Column:486
-No such column 'RecordTypeId' on entity 'Account'. If you are attempting to
-use a custom field, be sure to append the '__c' after the custom field name.
+No such column 'RecordTypeId' on entity 'Account'. If you are attempting to 
+use a custom field, be sure to append the '__c' after the custom field name. 
 Reference your WSDL or the describe call for the appropriate names.'
 ]
 row='1'
@@ -120,6 +116,16 @@ After you import your template into Anypoint Studio, follow these steps to run i
 + Inside the dialog, select Environment and set the variable `mule.env` to the value `dev`.
 + Click `Run`.
 <!-- Running on Studio (start) -->
+After you import your template into Anypoint Studio, follow these steps to run it:
+
++ Locate the properties file `mule.dev.properties`, in src/main/resources.
++ Complete all the properties required as per the examples in the "Properties to Configure" section.
++ Right click the template project folder.
++ Hover your mouse over `Run as`.
++ Click `Mule Application (configure)`.
++ Inside the dialog, select Environment and set the variable `mule.env` to the value `dev`.
++ Click `Run`.
+
 In order to make this template run on Anypoint Studio there are a few extra steps that needs to be made.
 Please check this Documentation Page:
 
@@ -127,7 +133,7 @@ Please check this Documentation Page:
 <!-- Running on Studio (end) -->
 
 ### Running on Mule Standalone
-Update the properties in one of the property files, for example in mule.prod.properties, and run your app with a corresponding environment variable. In this example, use `mule.env=prod`.
+Update the properties in one of the property files, for example in mule.prod.properties, and run your app with a corresponding environment variable. In this example, use `mule.env=prod`. 
 
 
 ## Running on CloudHub
@@ -144,6 +150,7 @@ In Studio, right click your project name in Package Explorer and select Anypoint
 
 ## Properties to Configure
 To use this template, configure properties such as credentials, configurations, etc.) in the properties file or in CloudHub from Runtime Manager > Manage Application > Properties. The sections that follow list example values.
+### Application Configuration
 <!-- Application Configuration (start) -->
 **Application Configuration**
 + http.port `9090`
@@ -173,6 +180,7 @@ To use this template, configure properties such as credentials, configurations, 
 + mail.from `batch.migrateAccounts.migration@mulesoft.com`
 + mail.to `your@email.com`
 + mail.subject `Batch Job Finished Report`
+​
 <!-- Application Configuration (end) -->
 
 # API Calls
@@ -210,13 +218,7 @@ This flow has Error Handling that basically consists on invoking the *On Error P
 
 ## endpoints.xml
 <!-- Default Endpoints XML (start) -->
-This file provides the inbound and outbound sides of your integration app.
-This template has only an [HTTP Inbound Endpoint](http://www.mulesoft.org/documentation/display/current/HTTP+Endpoint+Reference) as the way to trigger the use case.
-**HTTP Inbound Endpoint** - Start Synchronization
-+ `${http.port}` is set as a property to be defined either on a property file or in CloudHub environment variables.
-+ The path configured by default is `migrateaccounts` and you are free to change for the one you prefer.
-+ The host name for all endpoints in your CloudHub configuration should be defined as `localhost`. CloudHub will then route requests from your application domain URL to the endpoint.
-+ The endpoint is configured as a *request-response* since as a result of calling it the response will be the total of Accounts migrated and filtered by the criteria specified.<!-- Default Endpoints XML (end) -->
+This file contains the endpoints for triggering the template and for retrieving the objects that meet the defined criteria in a query. You can execute a batch job process with the query results.<!-- Default Endpoints XML (end) -->
 
 <!-- Endpoints XML (start) -->
 
