@@ -7,7 +7,7 @@
 		<section id="use_case">
 This Anypoint template serves as a foundation for setting an online sync of accounts from Salesforce to SAP S/4HANA.
 
-Use this template if would like to sync accounts from Salesforce to SAP S/4HANA business partners in manner of one time synchronization by browse toting the HTTP endpoint. The template will fetch all accounts by specified criteria and send it as to SAP S/4HANA to create/update business partner there.
+Use this template if you would like to sync accounts from Salesforce to SAP S/4HANA business partners in manner of one time synchronization by browse toting the HTTP endpoint. The template will fetch all accounts by specified criteria and send it to SAP S/4HANA to create/update business partner.
 Requirements have been set not only to be used as examples, but also to establish a starting point to adapt your integration to your requirements.
 
 As implemented, this template leverages the Mule batch module.
@@ -15,11 +15,11 @@ The batch job is divided into *Process* and *On Complete* stages.
 The integration is triggered by the HTTP endpoint to fetch all the Salesforce Accounts suitable for migration.
 Fetched accounts are passed to the batch as input. In the batch the business partner is fetched from SAP S/4HANA by its name.
 If it exists, its business partner identifier is resolved against SAP S/4HANA. If it doesn't exist, then new business partner number is fetched from SAP S/4HANA.
-Afterwards every such account from Salesforce is sent to SAP S/4HANA where it is asynchronously updated or created.
-Finally during the *On Complete* stage the template logs output statistics data into the console and send a notification e-mail with the results of the batch execution.
+Afterwards every account from Salesforce is sent to SAP S/4HANA where it is asynchronously updated or created.
+Finally, during the *On Complete* stage the template logs output statistics data into the console and sends a notification e-mail with the results of the batch execution.
 	</section>
 		<section id="considerations">
-​To make this template run, there are certain preconditions that must be considered. All of them deal with the preparations in both, that must be made for the template to run smoothly.
+​To make this template run, there are certain preconditions that must be considered. All of them deal with the preparations in both systems, that must be made for the template to run smoothly.
 **Failing to do so could lead to unexpected behavior of the template.**
 
 Before using this template, you may want to check out this [Documentation Page](https://docs.mulesoft.com/connectors/sap/sap-s4hana-cloud-connector), that will teach you how to work
@@ -39,7 +39,7 @@ After you import your template into Anypoint Studio, follow these steps to run i
 In order to make this template run on Anypoint Studio there are a few extra steps that needs to be made.
 Please check this Documentation Page:
 
-+ [Enabling Your Studio Project for SAP S/4HANA](https://docs.mulesoft.com/connectors/sap/sap-s4hana-cloud-connector)	
++ [Enabling Your Studio Project for SAP S/4HANA](https://docs.mulesoft.com/connectors/sap/sap-s4hana-cloud-connector)
 		</section>
 		<section id="sfdcsrc">
 ​If the user who configured the template for the source system does not have at least *read only* permissions for the fields that are fetched, then an *InvalidFieldFault* API fault displays.
@@ -62,7 +62,7 @@ column='486'
 ```
 		</section>
 		<section id="s4hana_dst">
-		
+
 Here's what you need to know about SAP S/4HANA to get this template to work.
 		</section>
 		<section id="application_configuration">
@@ -97,8 +97,19 @@ Here's what you need to know about SAP S/4HANA to get this template to work.
 ​
 		</section>
 		<section id="api_calls">
-		
+
 There are no particular considerations for this template regarding API calls
+		</section>
+		<section id="default_endpoints_xml">
+			<![CDATA[
+		This file provides the inbound and outbound sides of your integration app.
+This template has only an [HTTP Inbound Endpoint](http://www.mulesoft.org/documentation/display/current/HTTP+Endpoint+Reference) as the way to trigger the use case.
+**HTTP Inbound Endpoint** - Start Synchronization
++ `${http.port}` is set as a property to be defined either on a property file or in CloudHub environment variables.
++ The path configured by default is `migrateaccounts` and you are free to change for the one you prefer.
++ The host name for all endpoints in your CloudHub configuration should be defined as `localhost`. CloudHub will then route requests from your application domain URL to the endpoint.
++ The endpoint is configured as a *request-response* since as a result of calling it the response will be the total of Accounts migrated and filtered by the criteria specified.
+		]]>
 		</section>
 		<section id="default_business_logic_xml">
 		<![CDATA[
