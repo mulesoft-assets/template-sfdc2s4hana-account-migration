@@ -100,6 +100,17 @@ Here's what you need to know about SAP S/4HANA to get this template to work.
 
 There are no particular considerations for this template regarding API calls
 		</section>
+		<section id="default_endpoints_xml">
+			<![CDATA[
+		This file provides the inbound and outbound sides of your integration app.
+This template has only an [HTTP Inbound Endpoint](http://www.mulesoft.org/documentation/display/current/HTTP+Endpoint+Reference) as the way to trigger the use case.
+**HTTP Inbound Endpoint** - Start Synchronization
++ `${http.port}` is set as a property to be defined either on a property file or in CloudHub environment variables.
++ The path configured by default is `migrateaccounts` and you are free to change for the one you prefer.
++ The host name for all endpoints in your CloudHub configuration should be defined as `localhost`. CloudHub will then route requests from your application domain URL to the endpoint.
++ The endpoint is configured as a *request-response* since as a result of calling it the response will be the total of Accounts migrated and filtered by the criteria specified.
+		]]>
+		</section>
 		<section id="default_business_logic_xml">
 		<![CDATA[
 Functional aspect of the template is implemented on this XML, directed by one flow responsible of executing the logic.
