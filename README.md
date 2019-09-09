@@ -29,7 +29,7 @@ Finally, during the *On Complete* stage the template logs output statistics data
 <!-- Default Considerations (end) -->
 
 <!-- Considerations (start) -->
-​To make this template run, there are certain preconditions that must be considered. All of them deal with the preparations in both source (Database) and destination (Salesforce) systems, that must be made for the template to run smoothly.
+​To make this template run, there are certain preconditions that must be considered. All of them deal with the preparations in both systems, that must be made for the template to run smoothly.
 **Failing to do so could lead to unexpected behavior of the template.**
 
 Before using this template, you may want to check out this [Documentation Page](https://docs.mulesoft.com/connectors/sap/sap-s4hana-cloud-connector), that will teach you how to work
