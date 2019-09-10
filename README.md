@@ -36,8 +36,6 @@ Before using this template, you may want to check out this [Documentation Page](
 with SAP S/4HANA and Anypoint Studio.
 <!-- Considerations (end) -->
 
-
-
 ## Salesforce Considerations
 
 Here's what you need to know about Salesforce to get this template to work:
@@ -50,14 +48,14 @@ Here's what you need to know about Salesforce to get this template to work:
 If the user who configured the template for the source system does not have at least *read only* permissions for the fields that are fetched, then an *InvalidFieldFault* API fault displays.
 
 ```
-java.lang.RuntimeException: [InvalidFieldFault [ApiQueryFault 
+java.lang.RuntimeException: [InvalidFieldFault [ApiQueryFault
 [ApiFault  exceptionCode='INVALID_FIELD'
-exceptionMessage='Account.Phone, Account.Rating, Account.RecordTypeId, 
+exceptionMessage='Account.Phone, Account.Rating, Account.RecordTypeId,
 Account.ShippingCity
 ^
 ERROR at Row:1:Column:486
-No such column 'RecordTypeId' on entity 'Account'. If you are attempting to 
-use a custom field, be sure to append the '__c' after the custom field name. 
+No such column 'RecordTypeId' on entity 'Account'. If you are attempting to
+use a custom field, be sure to append the '__c' after the custom field name.
 Reference your WSDL or the describe call for the appropriate names.'
 ]
 row='1'
@@ -67,15 +65,14 @@ column='486'
 ```
 
 
+## SAP S/4HANA Considerations
+
+Here's what you need to know to get this template to work with SAP S/4HANA.
 
 
+### As a Data Destination
 
-
-
-
-
-
-
+There are no considerations with using SAP S/4HANA as a data destination.
 # Run it!
 Simple steps to get this template running.
 <!-- Run it (start) -->
@@ -116,19 +113,6 @@ After you import your template into Anypoint Studio, follow these steps to run i
 + Inside the dialog, select Environment and set the variable `mule.env` to the value `dev`.
 + Click `Run`.
 <!-- Running on Studio (start) -->
-After you import your template into Anypoint Studio, follow these steps to run it:
-
-+ Locate the properties file `mule.dev.properties`, in src/main/resources.
-+ Complete all the properties required as per the examples in the "Properties to Configure" section.
-+ Right click the template project folder.
-+ Hover your mouse over `Run as`.
-+ Click `Mule Application (configure)`.
-+ Inside the dialog, select Environment and set the variable `mule.env` to the value `dev`.
-+ Click `Run`.
-
-In order to make this template run on Anypoint Studio there are a few extra steps that needs to be made.
-Please check this Documentation Page:
-
 + [Enabling Your Studio Project for SAP S/4HANA](https://docs.mulesoft.com/connectors/sap/sap-s4hana-cloud-connector)
 <!-- Running on Studio (end) -->
 
